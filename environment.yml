@@ -1,0 +1,15 @@
+name: quantecon
+channels:
+  - default
+dependencies:
+  - pip
+  - python=3.8
+  - anaconda=2020.07
+  - pip:
+    - jupytext
+    - jupyter-book
+    - git+https://github.com/executablebooks/sphinx-multitoc-numbering
+    - git+https://github.com/quantecon/quantecon-book-theme
+    - joblib
+    - interpolation
+    - ghp-import
