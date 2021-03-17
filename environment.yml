@@ -6,12 +6,13 @@ dependencies:
   - anaconda=2020.11
   - pip
   - pip:
-    - jupytext
     - jupyter-book
-    - jupinx
     - sphinx-multitoc-numbering
     - quantecon-book-theme
-    - joblib
-    - interpolation
+    - sphinx-tojupyter
+    - sphinxext-rediraffe
+    - sphinx-exercise
+    - jupytext
     - ghp-import
+    - jupinx
 
