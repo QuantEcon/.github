@@ -1,5 +1,7 @@
 name: Test QuantEcon Environment
-on: [push]
+on:
+  schedule:
+    - cron: '0 22 * * *'
 jobs:
   tests:
     runs-on: ubuntu-latest
