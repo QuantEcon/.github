@@ -23,6 +23,18 @@ jobs:
       - name: Run lecture-python-programming.myst
         shell: bash -l {0}
         run: |
+          git clone https://github.com/quantecon/lecture-python-programming.myst
+          cd lecture-python-programming.myst
+          jb build lectures
+      - name: Run lecture-python.myst
+        shell: bash -l {0}
+        run: |
           git clone https://github.com/quantecon/lecture-python.myst
           cd lecture-python.myst
           jb build lectures
+      # - name: Run lecture-python-advanced.myst
+      #   shell: bash -l {0}
+      #   run: |
+      #     git clone https://github.com/quantecon/lecture-python-advanced.myst
+      #     cd lecture-python-advanced.myst
+      #     jb build lectures
