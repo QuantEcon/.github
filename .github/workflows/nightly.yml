@@ -1,5 +1,7 @@
 name: Test QuantEcon Environment
-on: [push]
+on:
+  push:
+    - master
   schedule:
     - cron: '0 22 * * *'
 jobs:
