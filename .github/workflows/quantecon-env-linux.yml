@@ -1,0 +1,85 @@
+name: Test QuantEcon Environment (Linux)
+on:
+  schedule:
+    # UTC 22:00 is early morning in Australia (Daily)
+    - cron:  '0 22 * * *'
+  push:
+    branches:
+      - main
+jobs:
+  execution-tests-linux:
+    name: Execution Tests (${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.9"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          auto-activate-base: true
+          miniconda-version: 'latest'
+          python-version: ${{ matrix.python-version }}
+          environment-file: environments/environment.yml
+          activate-environment: quantecon
+      - name: Build lecture-python-programming
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/quantecon/lecture-python-programming.myst
+          cd lecture-python-programming.myst
+          jb build lectures -W --keep-going
+      - name: Upload Execution Reports (lecture-python-programming)
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: reports-lecture-python-programming-${{ matrix.os }}
+          path: lecture-python-programming.myst/lectures/_build/html/reports
+      - name: Clean (lecture-python-programming)
+        run: rm -rf lecture-python-programming.myst
+      - name: Build lecture-python
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/quantecon/lecture-python.myst
+          cd lecture-python.myst
+          jb build lectures -W --keep-going
+      - name: Upload Execution Reports (lecture-python)
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: reports-lecture-python-${{ matrix.os }}
+          path: lecture-python.myst/lectures/_build/html/reports
+      - name: Clean (lecture-python)
+        run: rm -rf lecture-python.myst
+      - name: Build lecture-python-advanced
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/quantecon/lecture-python-advanced.myst
+          cd lecture-python-advanced.myst
+          jb build lectures -W --keep-going
+      - name: Upload Execution Reports (lecture-python-advanced)
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: reports-lecture-python-advanced-${{ matrix.os }}
+          path: lecture-python-advanced.myst/lectures/_build/html/reports
+      - name: Clean (lecture-python-advanced)
+        run: rm -rf lecture-python-advanced.myst
+      - name: Build python-lecture-sandpit.myst
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/quantecon/python-lecture-sandpit.myst
+          cd python-lecture-sandpit.myst
+          jb build lectures
+      - name: Upload Execution Reports (python-lecture-sandpit.myst)
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: reports-python-lecture-sandpit.myst-${{ matrix.os }}
+          path: python-lecture-sandpit.myst/lectures/_build/html/reports
+      - name: Clean (python-lecture-sandpit.myst)
+        run: rm -rf python-lecture-sandpit.myst 
+  
