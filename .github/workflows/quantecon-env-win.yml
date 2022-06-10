@@ -1,8 +1,8 @@
 name: Test QuantEcon Environment (Windows)
 on:
   schedule:
-    # UTC 21:00 is early morning in Australia (Daily)
-    - cron:  '0 21 * * *'
+    # UTC 22:00 is early morning in Australia on Thursday
+    - cron:  '0 22 * * 4'
   push:
     branches:
       - main

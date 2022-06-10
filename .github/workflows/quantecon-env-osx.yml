@@ -1,8 +1,8 @@
 name: Test QuantEcon Environment (OS X)
 on:
   schedule:
-    # UTC 23:00 is early morning in Australia (Daily)
-    - cron:  '0 23 * * *'
+    # UTC 22:00 is early morning in Australia on Monday
+    - cron:  '0 22 * * 1'
   push:
     branches:
       - main
