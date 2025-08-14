@@ -8,39 +8,10 @@ QuantEcon .github repository contains organization-level templates, environment 
 
 ### Environment Setup
 - Install conda/miniconda if not available: `conda --version`
-- **CRITICAL**: The current `environment.yml` has YAML syntax errors. Use the corrected commands below:
-- **Environment Creation**: `conda env create -f environment.yml` -- FAILS due to YAML syntax errors in environment.yml
-
-**Option 1: Use corrected environment setup (recommended for fresh setup)**:
-  ```bash
-  # Create properly formatted environment file
-  cat > corrected_environment.yml << 'EOF'
-  name: quantecon
-  channels:
-    - default
-  dependencies:
-    - python=3.13
-    - anaconda=2025.06
-    - pip
-    - pip:
-      - jupyter-book==1.0.4post1
-      - quantecon-book-theme==0.8.3
-      - sphinx-tojupyter==0.3.1
-      - sphinxext-rediraffe==0.2.7
-      - sphinx-reredirects==1.0.0
-      - sphinx-exercise==1.0.1
-      - sphinx-proof==0.2.1
-      - sphinxcontrib-youtube==1.4.1
-      - sphinx-togglebutton==0.3.2
-      - jupyterlab-myst
-      - jupytext
-  EOF
-  conda env create -f corrected_environment.yml
-  ```
-- **Environment setup**: `conda env create -f corrected_environment.yml` -- takes 15 minutes. NEVER CANCEL. Set timeout to 30+ minutes.
+- **Environment Creation**: `conda env create -f environment.yml` -- takes 15 minutes. NEVER CANCEL. Set timeout to 30+ minutes.
 - **Note**: Environment creation may fail due to network timeouts during pip package installation. If this happens, the CI environment typically has packages pre-installed.
 
-**Option 2: Use existing pre-installed environment (CI environments)**:
+**Alternative: Use existing pre-installed environment (CI environments)**:
 - **Activate environment**: `eval "$(conda shell.bash hook)" && conda activate quantecon`
 - **Verify installation**: `jupyter-book --version` should show "Jupyter Book : 1.0.4.post1"
 
@@ -107,7 +78,6 @@ QuantEcon .github repository contains organization-level templates, environment 
 
 ## Known Issues and Workarounds
 
-- **environment.yml syntax error**: The current `environment.yml` has incorrect YAML format. Missing colons after "channels" and "dependencies", and incorrect pip section structure.
 - **Network timeouts during environment creation**: The `conda env create` command may fail with pip timeout errors when downloading packages from PyPI. This is common in CI environments with network restrictions. Use the pre-installed environment when available.
 - **Build warnings**: Jupyter Book builds typically show warnings and return exit code 1, but still produce valid output. Check `_build/html/` for actual results.
 - **Network dependencies**: Some builds may fail to fetch external inventories (e.g., jax.quantecon.org) due to network restrictions - this is expected and doesn't prevent successful builds.
@@ -116,7 +86,7 @@ QuantEcon .github repository contains organization-level templates, environment 
 ## Repository Structure
 
 ### Key Files
-- `environment.yml`: Main conda environment specification (has YAML syntax errors)
+- `environment.yml`: Main conda environment specification
 - `.github/workflows/quantecon-env-*.yml`: CI workflows for Linux, macOS, Windows testing
 - `.github/dependabot.yml`: Dependabot configuration for GitHub Actions updates  
 - `FUNDING.yml`: Sponsorship configuration
@@ -131,31 +101,10 @@ QuantEcon .github repository contains organization-level templates, environment 
 ## Common Commands Reference
 
 ```bash
-# Environment setup (Option 1: Create new environment)
-cat > corrected_environment.yml << 'EOF'
-name: quantecon
-channels:
-  - default
-dependencies:
-  - python=3.13
-  - anaconda=2025.06
-  - pip
-  - pip:
-    - jupyter-book==1.0.4post1
-    - quantecon-book-theme==0.8.3
-    - sphinx-tojupyter==0.3.1
-    - sphinxext-rediraffe==0.2.7
-    - sphinx-reredirects==1.0.0
-    - sphinx-exercise==1.0.1
-    - sphinx-proof==0.2.1
-    - sphinxcontrib-youtube==1.4.1
-    - sphinx-togglebutton==0.3.2
-    - jupyterlab-myst
-    - jupytext
-EOF
-conda env create -f corrected_environment.yml
+# Environment setup
+conda env create -f environment.yml
 
-# Environment setup (Option 2: Use existing environment in CI)
+# Environment setup (Alternative: Use existing environment in CI)
 eval "$(conda shell.bash hook)" && conda activate quantecon
 
 # Quick validation
@@ -177,7 +126,7 @@ cd .. && rm -rf lecture-python-programming.myst
 
 ### Expected Command Output
 
-#### conda env create -f corrected_environment.yml
+#### conda env create -f environment.yml
 ```
 # Takes ~15 minutes, downloads ~280MB of packages
 # Shows package resolution, downloading, and installation progress
