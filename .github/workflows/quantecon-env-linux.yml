@@ -33,7 +33,7 @@ jobs:
           cd lecture-python-programming.myst
           jb build lectures -W --keep-going
       - name: Upload Execution Reports (lecture-python-programming)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: reports-lecture-python-programming-${{ matrix.os }}
@@ -47,7 +47,7 @@ jobs:
           cd lecture-python.myst
           jb build lectures -W --keep-going
       - name: Upload Execution Reports (lecture-python)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: reports-lecture-python-${{ matrix.os }}
@@ -61,7 +61,7 @@ jobs:
           cd lecture-python-advanced.myst
           jb build lectures -W --keep-going
       - name: Upload Execution Reports (lecture-python-advanced)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: reports-lecture-python-advanced-${{ matrix.os }}
@@ -75,7 +75,7 @@ jobs:
           cd python-lecture-sandpit.myst
           jb build lectures
       - name: Upload Execution Reports (python-lecture-sandpit.myst)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: reports-python-lecture-sandpit.myst-${{ matrix.os }}
