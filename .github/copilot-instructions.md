@@ -13,7 +13,7 @@ QuantEcon .github repository contains organization-level templates, environment 
 
 **Alternative: Use existing pre-installed environment (CI environments)**:
 - **Activate environment**: `eval "$(conda shell.bash hook)" && conda activate quantecon`
-- **Verify installation**: `jupyter-book --version` should show "Jupyter Book : 1.0.4.post1"
+- **Verify installation**: `jupyter-book --version` should show Jupyter Book version information
 
 ### Building Lecture Repositories
 - **ALWAYS** activate the quantecon environment first: `eval "$(conda shell.bash hook)" && conda activate quantecon`
@@ -74,7 +74,7 @@ QuantEcon .github repository contains organization-level templates, environment 
 - **Environment Creation**: 15 minutes -- NEVER CANCEL. Allow 30+ minute timeout.
 - **Single Lecture Build**: 4 minutes -- NEVER CANCEL. Allow 15+ minute timeout.
 - **Full CI Workflow**: 25+ minutes total -- NEVER CANCEL. Allow 45+ minute timeout.
-- **Large Package Downloads**: The anaconda=2025.06 package is very large (~280MB). Network speed affects timing.
+- **Large Package Downloads**: The anaconda package is very large (~280MB). Network speed affects timing.
 
 ## Known Issues and Workarounds
 
@@ -135,13 +135,15 @@ cd .. && rm -rf lecture-python-programming.myst
 
 #### jupyter-book --version
 ```
-Jupyter Book      : 1.0.4.post1
-External ToC      : 1.0.1
-MyST-Parser       : 3.0.1
-MyST-NB           : 1.3.0
-Sphinx Book Theme : 1.1.4
-Jupyter-Cache     : 1.0.1
-NbClient          : 0.10.2
+# Shows current Jupyter Book version and dependencies
+# Example output format:
+# Jupyter Book      : 1.0.x.postX
+# External ToC      : X.X.X
+# MyST-Parser       : X.X.X
+# MyST-NB           : X.X.X
+# Sphinx Book Theme : X.X.X
+# Jupyter-Cache     : X.X.X
+# NbClient          : X.X.X
 ```
 
 #### jb build lectures -W --keep-going
