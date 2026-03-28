@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'environment.yml'
 jobs:
   execution-tests-win:
     name: Execution Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -14,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["windows-latest"]
-        python-version: ["3.9"]
+        python-version: ["3.13"]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -27,9 +29,9 @@ jobs:
           environment-file: environment.yml
           activate-environment: quantecon
       - name: Build lecture-python-programming
-        shell: powershell
+        shell: bash -l {0}
         run: |
-          git clone https://github.com/quantecon/lecture-python-programming.myst
+          git clone https://github.com/QuantEcon/lecture-python-programming.myst
           cd lecture-python-programming.myst
           jb build lectures -W --keep-going
       - name: Upload Execution Reports (lecture-python-programming)
@@ -39,27 +41,29 @@ jobs:
           name: reports-lecture-python-programming-${{ matrix.os }}
           path: lecture-python-programming.myst/lectures/_build/html/reports
       - name: Clean (lecture-python-programming)
-        shell: powershell
-        run: Remove-Item -Recurse -Force lecture-python-programming.myst
-      - name: Build lecture-python
-        shell: powershell
+        shell: bash -l {0}
+        run: rm -rf lecture-python-programming.myst
+      
+      - name: Build lecture-python-intro
+        shell: bash -l {0}
         run: |
-          git clone https://github.com/quantecon/lecture-python.myst
-          cd lecture-python.myst
+          git clone https://github.com/QuantEcon/lecture-python-intro
+          cd lecture-python-intro
           jb build lectures -W --keep-going
-      - name: Upload Execution Reports (lecture-python)
+      - name: Upload Execution Reports (lecture-python-intro)
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: reports-lecture-python-${{ matrix.os }}
-          path: lecture-python.myst/lectures/_build/html/reports
-      - name: Clean (lecture-python)
-        shell: powershell
-        run: Remove-Item -Recurse -Force lecture-python.myst
+          name: reports-lecture-python-intro-${{ matrix.os }}
+          path: lecture-python-intro/lectures/_build/html/reports
+      - name: Clean (lecture-python-intro)
+        shell: bash -l {0}
+        run: rm -rf lecture-python-intro
+      
       - name: Build lecture-python-advanced
-        shell: powershell
+        shell: bash -l {0}
         run: |
-          git clone https://github.com/quantecon/lecture-python-advanced.myst
+          git clone https://github.com/QuantEcon/lecture-python-advanced.myst
           cd lecture-python-advanced.myst
           jb build lectures -W --keep-going
       - name: Upload Execution Reports (lecture-python-advanced)
@@ -69,20 +73,46 @@ jobs:
           name: reports-lecture-python-advanced-${{ matrix.os }}
           path: lecture-python-advanced.myst/lectures/_build/html/reports
       - name: Clean (lecture-python-advanced)
-        shell: powershell
-        run: Remove-Item -Recurse -Force lecture-python-advanced.myst
-      - name: Build python-lecture-sandpit.myst
-        shell: powershell
+        shell: bash -l {0}
+        run: rm -rf lecture-python-advanced.myst
+      
+      - name: Install JAX, PyTorch (CPU mode)
+        shell: bash -l {0}
         run: |
-          git clone https://github.com/quantecon/python-lecture-sandpit.myst
-          cd python-lecture-sandpit.myst
-          jb build lectures
-      - name: Upload Execution Reports (python-lecture-sandpit.myst)
+          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install pyro-ppl
+          pip install "jax[cpu]"
+          pip install numpyro pyro-ppl
+          python scripts/test-jax-install.py
+      
+      - name: Build lecture-python
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/QuantEcon/lecture-python.myst
+          cd lecture-python.myst
+          jb build lectures -W --keep-going
+      - name: Upload Execution Reports (lecture-python)
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: reports-python-lecture-sandpit.myst-${{ matrix.os }}
-          path: python-lecture-sandpit.myst/lectures/_build/html/reports
-      - name: Clean (python-lecture-sandpit.myst)
-        shell: powershell
-        run: Remove-Item -Recurse -Force python-lecture-sandpit.myst 
+          name: reports-lecture-python-${{ matrix.os }}
+          path: lecture-python.myst/lectures/_build/html/reports
+      - name: Clean (lecture-python)
+        shell: bash -l {0}
+        run: rm -rf lecture-python.myst
+      
+      - name: Build lecture-jax
+        shell: bash -l {0}
+        run: |
+          git clone https://github.com/QuantEcon/lecture-jax
+          cd lecture-jax
+          jb build lectures -W --keep-going
+      - name: Upload Execution Reports (lecture-jax)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: reports-lecture-jax-${{ matrix.os }}
+          path: lecture-jax/lectures/_build/html/reports
+      - name: Clean (lecture-jax)
+        shell: bash -l {0}
+        run: rm -rf lecture-jax 
